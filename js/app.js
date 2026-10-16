@@ -66,13 +66,13 @@ function crearTarjeta(ruta) {
   const nombre = document.createElement("h3")
   nombre.textContent = ruta.nombre
   const zona = document.createElement("p")
-  zona.textContent = ruta.zona
+  zona.textContent = ruta.zona + " Zona"
   const km =document.createElement("p")
-  km.textContent = ruta.km
+  km.textContent = ruta.km + " km"
 const desnivel = document.createElement("p")
-  desnivel.textContent = ruta.desnivel
+  desnivel.textContent = ruta.desnivel +" Desnivel"
   const plazas = document.createElement("p")
-  plazas.textContent = ruta.plazas
+  plazas.textContent = ruta.plazas + " Rutas"
 
 
   

@@ -9,8 +9,8 @@
  *   plazas   plazas libres que quedan
  */
 const RUTAS = [
-  { nombre: 'Cahorros de Monachil',       zona: 'Valle de Lecrín',  km: 9,  desnivel: 350,  plazas: 15 },
-  { nombre: 'Veleta por la Hoya de la Mora', zona: 'Sierra Nevada', km: 14, desnivel: 1100, plazas: 12 },
+  { nombre: 'Cahorros de Monachil',       zona: 'Valle de Lecrín',  km: 9 ,  desnivel: 350,  plazas: 15 },
+  { nombre: 'Veleta por la Hoya de la Mora', zona: 'Sierra Nevada', km: 14 , desnivel: 1100, plazas: 12 },
   { nombre: 'Pueblos blancos de la Alpujarra', zona: 'La Alpujarra', km: 13, desnivel: 650,  plazas: 16 },
   { nombre: 'Mulhacén desde Trevélez',    zona: 'Sierra Nevada',    km: 22, desnivel: 1700, plazas: 3 },
   { nombre: 'Acequias de Pitres',         zona: 'La Alpujarra',     km: 10, desnivel: 380,  plazas: 0 },
