@@ -37,7 +37,10 @@ const rejilla = document.querySelector("#rejilla");
  * @returns {string} "baja", "media" o "alta".
  */
 function calcularDificultad(desnivel) {
-  // TODO
+if (desnivel < 500){return "baja"}
+else if (desnivel < 1200){return "media"}
+else {return "alta"}
+  
 }
 
 /**
@@ -48,7 +51,10 @@ function calcularDificultad(desnivel) {
  * @returns {number} Horas, redondeadas a un decimal.
  */
 function calcularDuracion(km, desnivel, kmPorHora = 4) {
-  // TODO  Pista para redondear a un decimal: Math.round(horas * 10) / 10
+  let horas = (km / kmPorHora) + (desnivel /400)
+  horas = Math.round(horas + 10) / 10
+  console.log(horas)
+  return horas
 }
 
 
@@ -72,10 +78,12 @@ function crearTarjeta(ruta) {
 const desnivel = document.createElement("p")
   desnivel.textContent = ruta.desnivel +" Desnivel"
   const plazas = document.createElement("p")
-  plazas.textContent = ruta.plazas + " Rutas"
-
-
-  
+  plazas.textContent = ruta.plazas + " Plazas"
+ 
+const nivel = document.createElement("p")
+nivel.textContent = calcularDificultad(ruta.desnivel)
+const horas = document.createElement("p")
+  horas.textContent = "Duración aproximada : " + calcularDuracion(ruta.km, ruta.desnivel) + "h"
 
   const contenedor = document.createElement("div")
   contenedor.classList.add("tarjeta")
@@ -85,6 +93,8 @@ const desnivel = document.createElement("p")
   contenedor.appendChild(km)
   contenedor.appendChild(desnivel)
   contenedor.appendChild(plazas)
+  contenedor.appendChild(horas)
+   contenedor.appendChild(nivel)
 
 
   return contenedor
@@ -96,6 +106,7 @@ const desnivel = document.createElement("p")
  * @param {Object[]} rutas Array de rutas que hay que mostrar.
  */
 function pintarRutas(rutas) {
+  rejilla.textContent = ""
   rutas.forEach(ruta =>{
 rejilla.appendChild(crearTarjeta(ruta))
 
@@ -114,7 +125,11 @@ rejilla.appendChild(crearTarjeta(ruta))
  * @returns {Object[]} Un array nuevo; RUTAS no se modifica.
  */
 function filtrarPorDificultad(rutas, nivel) {
-  // TODO
+  if(nivel === "todas"){
+    return rutas
+  }
+  //Filter devuelve todos los elementos de la arraty que cumplan con la condicion en este caso la condicion es que el desnivel de la ruta nos devuelve la dificulats
+  return rutas.filter(ruta => calcularDificultad(ruta.desnivel) === nivel)
 }
 
 
@@ -156,12 +171,53 @@ function validarInscripcion(nombre, plazas, ruta) {
  */
 function inscribir(evento) {
   evento.preventDefault();          // evita que la página se recargue
-  // TODO
+  let nombre = document.getElementById("nombre").value
+  let email = document.getElementById("email").value
+  let ruta = document.getElementById("ruta").value
+  let plazas = document.getElementById("plazas").value
+  validacion = validarInscripcion(nombre,plazas,ruta)
+  // si tenemos errores los mostraremos y salimo de la funcion
+  if(validacion.length > 0) {
+    mensaje.textContent = ""
+    validacion.forEach(men => {
+      mensaje.innerHTML += men +"</br>"
+    })
+    mensaje.className = "mensaje mensaje-error"
+    return
+  }
+//no hay errores , guardamos los datos en la isncripcion
+const inscripciones = almacen.leer("inscripciones", [])
+inscripciones.push({
+  nombre: nombre.trim(),
+  ruta: RUTAS[ruta].nombre,
+  plazas: plazas
+})
+almacen.guardar("inscripciones" , inscripciones)
+//mostrar un mensaje de exito
+mensaje.textContent = `Inscripción guardada: ${plazas} plazas en ${RUTAS [ruta].nombre}`
+mensaje.className ="mensaje mensaje -ok"
+pintarInscripciones()
+
+
 }
 
 /** Pinta la lista «Mis inscripciones» con lo que hay guardado en el almacén. */
 function pintarInscripciones() {
-  // TODO
+  
+  listaInscripciones.textContent=""
+  const inscripciones = almacen.leer("inscripciones",[])
+  inscripciones.forEach(ins => {
+    const li = document.createElement("li")
+    li.textContent = ` ${ins.nombre} - ${ins.ruta} - ${ins.plazas} plazas `
+    listaInscripciones.append(li)
+  })
+
+  // mostrar un mensaje si no hay inscripciones
+  if(inscripciones.length === 0){
+    const li = document.createElement("li")
+    li.textContent = "Todavía no tienes inscripciones"
+    listaInscripciones.append(li)
+  }
 }
 
 
@@ -185,7 +241,11 @@ audioBienvenida.addEventListener(`ended`, () =>{
 
 /** Resalta durante 3 segundos la tarjeta de la ruta del mes (RUTA_DEL_MES). */
 function destacarRutaDelMes() {
-  // TODO
+  const tarjeta = rejilla.children[RUTA_DEL_MES]
+  tarjeta.classList.add("destacada")
+  setTimeout(()=> {
+    tarjeta.classList.remove("destacada")
+  }, 3000)
 }
 
 
